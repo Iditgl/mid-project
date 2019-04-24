@@ -15,6 +15,7 @@
   tags: installation
 
 - name: Ensure group "docker" exists
+  sudo: yes
   group:
     name: docker
     state: present
