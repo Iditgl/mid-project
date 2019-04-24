@@ -70,27 +70,45 @@
 
 
 
-- name: Add an apt signing key for Kubernetes
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
+- name: disable SELinux
+  command: setenforce 0
 
-- name: Adding apt repository for Kubernetes
-  apt_repository:
-    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
-    state: present
-    filename: kubernetes.list
+- name: disable SELinux on reboot
+  selinux:
+   state: disabled
 
-- name: Install Kubernetes binaries
-  apt:
-    name: "{{ packages }}"
+
+- name: add Kubernetes' YUM repository
+  yum_repository:
+    name: Kubernetes
+    description: Kubernetes YUM repository
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    gpgcheck: yes
+
+- name: install kubelet
+  yum:
+    name: kubelet-1.10.12
     state: present
-    update_cache: yes
-  vars:
-    packages:
-      - kubelet
-      - kubeadm
-      - kubectl
+    update_cache: true
+
+- name: install kubeadm
+  yum:
+    name: kubeadm-1.10.12
+    state: present
+- name: install kubectl
+  yum:
+    name: kubectl-1.10.12
+    state: present
+    allow_downgrade: yes
+
+
+- name: start kubelet
+  service:
+    name: kubelet
+    enabled: yes
+    state: started
+
 
 
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
