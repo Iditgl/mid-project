@@ -1,0 +1,15 @@
+[all]
+mid-proj-k8s-master-1 ansible_host=3.213.126.205
+mid-proj-k8s-node-1 ansible_host=3.208.88.124
+mid-proj-k8s-node-2 ansible_host=3.80.163.193
+
+[all:vars]
+ansible_ssh_private_key_file=./mid_project.pem
+ansible_user=centos
+
+[kube-master]
+mid-proj-k8s-master-1
+
+[kube-node]
+mid-proj-k8s-node-1
+mid-proj-k8s-node-2
