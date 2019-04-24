@@ -1,5 +1,6 @@
 ---
-- hosts: kube-master
+- name: Provision
+  hosts: kube-master
   gather_facts: False
   roles:
     - master
