@@ -128,9 +128,3 @@
   sudo: no
   become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="join-command"
-
-#Step 2.7: Setup a handler for checking Docker daemon using the below code.
-
-handlers:
-  - name: docker status
-    service: name=docker state=started
