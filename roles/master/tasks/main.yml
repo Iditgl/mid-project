@@ -14,6 +14,11 @@
     state: started
   tags: installation
 
+- name: Ensure group "docker" exists
+  group:
+    name: docker
+    state: present
+
 
 - name: Add vagrant user to docker group
   user:
