@@ -1,6 +1,7 @@
 # Step 2.1: Install Docker and its dependent components.
 
 - name: install Docker
+  sudo: yes
   yum:
     name: docker
     state: present
