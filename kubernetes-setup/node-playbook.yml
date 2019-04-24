@@ -1,6 +1,6 @@
 # Step 2.1: Install Docker and its dependent components.
 ---
-- hosts: kube-node
+- hosts: all
   become: true
   tasks:
   - name: Install packages that allow apt to be used over HTTPS
