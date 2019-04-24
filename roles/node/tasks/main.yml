@@ -8,6 +8,7 @@
     update_cache: true
 
 - name: start Docker
+  sudo: yes
   service:
     name: docker
     state: started
