@@ -15,6 +15,7 @@ Vagrant.configure("2") do |config|
     master.vm.hostname = "k8s-master"
     master.vm.provision "ansible" do |ansible|
       ansible.playbook = "kubernetes-setup/master-playbook.yml"
+      ansible.skip_tags = "installation"
     end
   end
 

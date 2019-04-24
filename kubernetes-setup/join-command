@@ -1,0 +1,1 @@
+kubeadm join 192.168.50.10:6443 --token ui8ztp.npjmx8pcl391274r     --discovery-token-ca-cert-hash sha256:4a26772894d2fa359f90640da993b2c9fa383d463bf5350f4a3a842ab521b6c5 

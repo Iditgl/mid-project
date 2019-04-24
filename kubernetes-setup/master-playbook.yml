@@ -16,16 +16,20 @@
       - curl
       - gnupg-agent
       - software-properties-common
+    tags: installation
 
   - name: Add an apt signing key for Docker
     apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
+    tags: installation
+
 
   - name: Add apt repository for stable version
     apt_repository:
       repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
       state: present
+    tags: installation
 
   - name: Install docker and its dependecies
     apt:
@@ -39,11 +43,13 @@
       - containerd.io
     notify:
       - docker status
+    tags: installation
 
   - name: Add vagrant user to docker group
     user:
       name: vagrant
       group: docker
+    tags: installation
 
   - name: Remove swapfile from /etc/fstab
     mount:
@@ -53,10 +59,12 @@
     with_items:
       - swap
       - none
+    tags: installation
 
   - name: Disable swap
     command: swapoff -a
     when: ansible_swaptotal_mb > 0
+    tags: installation
 
 
 
@@ -91,10 +99,8 @@
 
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
 
-
-
   - name: Initialize the Kubernetes cluster using kubeadm
-    command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --pod-network-cidr=192.168.0.0/16
+    command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
 
 
 
@@ -103,16 +109,18 @@
   - name: Setup kubeconfig for vagrant user
     command: "{{ item }}"
     with_items:
-     - mkdir -p /home/vagrant/.kube
-     - cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
-     - chown vagrant:vagrant /home/vagrant/.kube/config
+     - mkdir -p ~/.kube
+     - cp -i /etc/kubernetes/admin.conf ~/.kube/config
+     - chown vagrant:vagrant ~/.kube/config
+
+  - name: Add Calico RBAC setting
+    command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
 
    #Step 2.5: Setup the container networking provider and the network policy engine using the below code.
 
   - name: Install calico pod network
-    become: false
-    command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
+    command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
 
   #Step 2.6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
@@ -121,7 +129,9 @@
     register: join_command
 
   - name: Copy join command to local file
-    local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
+    sudo: no
+    become: false
+    local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="join-command"
 
   #Step 2.7: Setup a handler for checking Docker daemon using the below code.
 
