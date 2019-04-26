@@ -102,20 +102,26 @@
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
 
-- name: Setup kubeconfig for vagrant user
-  command: "{{ item }}"
-  with_items:
-   - mkdir -p ~/.kube
-   - cp -i /etc/kubernetes/admin.conf ~/.kube/config
-   - chown vagrant:vagrant ~/.kube/config
+#- name: Setup kubeconfig for vagrant user
+#  command: "{{ item }}"
+#  with_items:
+#   - mkdir -p ~/.kube
+#   - cp -i /etc/kubernetes/admin.conf ~/.kube/config
+#   - chown vagrant:vagrant ~/.kube/config
 
-- name: Add Calico RBAC setting
-  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+#- name: Add Calico RBAC setting
+#  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
- #Step 2.5: Setup the container networking provider and the network policy engine using the below code.
+#Step 2.5: Setup the container networking provider and the network policy engine using the below code.
 
-- name: Install calico pod network
-  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
+- name: K8S | Install Master | Install pod network
+  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+
+- name: K8S | Install Master | Install pod network
+  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+
+#- name: Install calico pod network
+#  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
 
 #Step 2.6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
