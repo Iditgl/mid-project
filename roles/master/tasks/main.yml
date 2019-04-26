@@ -21,11 +21,11 @@
     name: docker
     state: present
 
-- name: Add vagrant user to docker group
-  user:
-    name: vagrant
-    group: docker
-  tags: installation
+#- name: Add vagrant user to docker group
+#  user:
+#    name: vagrant
+#    group: docker
+#  tags: installation
 
 - name: Remove swapfile from /etc/fstab
   mount:
