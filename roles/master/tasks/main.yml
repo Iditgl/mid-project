@@ -107,6 +107,7 @@
   with_items:
    - mkdir -p ~/.kube
    - cp -rf /etc/kubernetes/admin.conf ~/.kube/config
+   - chown centos:centos  ~/.kube/config
    
 #   - cp -i /etc/kubernetes/admin.conf ~/.kube/config
 #   - chown vagrant:vagrant ~/.kube/config
