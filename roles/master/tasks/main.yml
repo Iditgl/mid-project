@@ -92,13 +92,13 @@
 #  command: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
 
 
-- name: Initialize Kubernetes cluster using kubeadm
-      shell: kubeadm init --token={{ kubeadm_token }} --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16
-      become_method: sudo
+#- name: Initialize Kubernetes cluster using kubeadm
+#      shell: kubeadm init --token={{ kubeadm_token }} --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16
+#      become_method: sudo
       
 - name: Initialize Kubernetes cluster using kubeadm
-      shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16
-      become_method: sudo
+  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16
+  become_method: sudo
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
 
