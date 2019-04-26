@@ -7,11 +7,12 @@
     state: present
     update_cache: true
 
-- name: start Docker
+- name: start Docker service
   sudo: yes
   service:
     name: docker
     state: started
+    enabled: yes
   tags: installation
 
 - name: Ensure group "docker" exists
