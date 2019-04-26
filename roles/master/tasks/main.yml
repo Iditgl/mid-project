@@ -21,7 +21,6 @@
     name: docker
     state: present
 
-
 - name: Add vagrant user to docker group
   user:
     name: vagrant
@@ -43,17 +42,12 @@
   # when: ansible_swaptotal_mb > 0
 #   tags: installation
 
-
 - name: Create List of nodes to be added into Cluster
   set_fact: nodelist={%for host in groups['kube-node']%}"{{hostvars[host].ansible_host}}"{% if not loop.last %},{% endif %}{% endfor %}
 
 - debug: msg="{{nodelist}}"
 
-
-
 # Step 2.3: Installing kubelet, kubeadm and kubectl using the below code.
-
-
 
 - name: disable SELinux
   command: setenforce 0
@@ -61,7 +55,6 @@
 - name: disable SELinux on reboot
   selinux:
    state: disabled
-
 
 - name: add Kubernetes' YUM repository
   yum_repository:
@@ -87,21 +80,16 @@
     state: present
     allow_downgrade: yes
 
-
 - name: start kubelet
   service:
     name: kubelet
     enabled: yes
     state: started
 
-
-
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
 
 - name: Initialize the Kubernetes cluster using kubeadm
   command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
-
-
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
 
@@ -114,7 +102,6 @@
 
 - name: Add Calico RBAC setting
   command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
-
 
  #Step 2.5: Setup the container networking provider and the network policy engine using the below code.
 
