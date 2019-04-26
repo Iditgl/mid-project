@@ -89,7 +89,22 @@
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
 
 - name: Initialize the Kubernetes cluster using kubeadm
-  command: kubeadm init --apiserver-advertise-address="192.168.50.10" --apiserver-cert-extra-sans="192.168.50.10"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
+  command: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
+
+
+- name: Init Kubernetes cluster
+  when: reset_cluster is succeeded
+  shell: |
+    kubeadm init --service-cidr {{ service_cidr }} \
+                 --kubernetes-version {{ kube_version }} \
+                 --pod-network-cidr {{ pod_network_cidr }} \
+                 --token {{ token }} \
+                 --apiserver-advertise-address {{ master_ip }} \
+                 {{ kubeadm_opts }} \
+                 {{ init_opts }}
+  register: init_cluster
+
+
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
 
