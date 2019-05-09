@@ -18,12 +18,13 @@
   service:
     name: docker
     state: started
+    enabled: yes
   tags: installation
-
-- name: Add vagrant user to docker group
-  user:
-    name: vagrant
-    group: docker
+  
+#- name: Add vagrant user to docker group
+#  user:
+#    name: vagrant
+#    group: docker
 
 # Step 2.2: Kubelet will not start if the system has swap enabled, so we are disabling swap using the below code.
 
@@ -36,14 +37,8 @@
     - swap
     - none
 
-#- name: Disable swap
-#  command: swapoff -a
-  # when: ansible_swaptotal_mb > 0
-
 - name: Disable swap
   command: swapoff -a
-  # when: ansible_swaptotal_mb > 0
-#   tags: installation
 
 # Step 2.3: Installing kubelet, kubeadm and kubectl using the below code.
 
@@ -72,6 +67,7 @@
   yum:
     name: kubeadm-1.10.12
     state: present
+    
 - name: install kubectl
   yum:
     name: kubectl-1.10.12
