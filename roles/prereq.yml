@@ -1,4 +1,5 @@
 ---
+#sudo ansible-playbook -i hosts prereq.yml -b --become-user=root
 - hosts: 127.0.0.1
   connection: local
   tasks:
