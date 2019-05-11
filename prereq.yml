@@ -1,0 +1,36 @@
+---
+#sudo ansible-playbook -i hosts prereq.yml -b --become-user=root
+
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+  - easy_install:
+      name: pip
+      state: latest
+
+  - name: Install dependent python modules
+    pip:
+      name: "{{item}}"
+      state: present
+    with_items:
+      - docker-py==1.10.6
+      - docker-compose==1.9.0
+
+  - name: Log into DockerHub
+    docker_login:
+      username: midproject
+      password: Aa12345678
+      email: iditmich@gmail.com
+
+  - name: Adding Jenkins Account To Sudoers
+#- hosts: localhost
+    lineinfile:
+      dest: /etc/sudoers
+      regexp: "^jenkins ALL"
+      line: "jenkins ALL=(ALL) NOPASSWD:ALL"
+      validate: "visudo -cf %s"
+      state: present
+    become: true
+#    when: >
+#          enable_jenkins_sudo is defined and
+#          enable_jenkins_sudo
