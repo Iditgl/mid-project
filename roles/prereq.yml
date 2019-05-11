@@ -1,16 +1,5 @@
 ---
 #sudo ansible-playbook -i hosts prereq.yml -b --become-user=root
-#- hosts: localhost
-#  lineinfile:
-#    dest: /etc/sudoers
-#    regexp: "^jenkins ALL"
-#    line: "jenkins ALL=(ALL) NOPASSWD:ALL"
-#    validate: "visudo -cf %s"
-#    state: present
-#  become: true
-#  when: >
-#        enable_jenkins_sudo is defined and
-#        enable_jenkins_sudo
 
 - hosts: 127.0.0.1
   connection: local
@@ -32,3 +21,16 @@
       username: midproject
       password: Aa12345678
       email: iditmich@gmail.com
+
+  - name: Adding Jenkins Account To Sudoers
+#- hosts: localhost
+    lineinfile:
+      dest: /etc/sudoers
+      regexp: "^jenkins ALL"
+      line: "jenkins ALL=(ALL) NOPASSWD:ALL"
+      validate: "visudo -cf %s"
+      state: present
+    become: true
+#    when: >
+#          enable_jenkins_sudo is defined and
+#          enable_jenkins_sudo
