@@ -16,6 +16,13 @@
       - docker-py==1.10.6
       - docker-compose==1.9.0
 
+  - name: Ensure docker deamon is running
+    service:
+      name: docker
+      state: started
+      enabled: yes
+    become: true
+    
   - name: Log into DockerHub
     docker_login:
       username: midproject
