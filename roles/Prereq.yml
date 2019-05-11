@@ -1,4 +1,16 @@
 ---
+- name: users | Adding Jenkins Account To Sudoers
+- hosts: localhost
+  lineinfile:
+    dest: /etc/sudoers
+    regexp: "^jenkins ALL"
+    line: "jenkins ALL=(ALL) NOPASSWD:ALL"
+    validate: "visudo -cf %s"
+    state: present
+  become: true
+  when: >
+        enable_jenkins_sudo is defined and
+        enable_jenkins_sudo
 - hosts: local_host
   gather_facts: false
   vars_prompt:
