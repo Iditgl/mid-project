@@ -11,6 +11,13 @@
   when: >
         enable_jenkins_sudo is defined and
         enable_jenkins_sudo
+
+- name: Log into DockerHub
+  docker_login:
+    username: midproject
+    password: Aa12345678
+    email: iditmich@gmail.com
+
 - hosts: local_host
   gather_facts: false
   vars_prompt:
