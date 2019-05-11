@@ -1,9 +1,18 @@
 ---
+- name: Prerequisites
+  #hosts: 127.0.0.1
+  - hosts: 127.0.0.1
+    connection: local
+    gather_facts: False
+    roles:
+      - localhost
+      
 - name: Provision
   hosts: kube-master
   gather_facts: False
   roles:
     - master
+    
 - hosts: kube-node
   gather_facts: false
   roles:
