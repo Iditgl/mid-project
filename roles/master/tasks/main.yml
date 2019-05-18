@@ -21,11 +21,11 @@
     name: docker
     state: present
 
-#- name: Add vagrant user to docker group
-#  user:
-#    name: vagrant
-#    group: docker
-#  tags: installation
+- name: Add centos user to docker group
+  user:
+    name: centos
+    group: docker
+  tags: installation
 
 - name: Remove swapfile from /etc/fstab
   mount:
@@ -95,7 +95,8 @@
 #      become_method: sudo
       
 - name: Initialize Kubernetes cluster using kubeadm
-  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16 --ignore-preflight-errors=all
+  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+#  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16 --ignore-preflight-errors=all  
   become_method: sudo
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
