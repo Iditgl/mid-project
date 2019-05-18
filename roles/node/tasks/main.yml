@@ -21,10 +21,10 @@
     enabled: yes
   tags: installation
   
-#- name: Add vagrant user to docker group
-#  user:
-#    name: vagrant
-#    group: docker
+- name: Add centos user to docker group
+  user:
+    name: centos
+    group: docker
 
 # Step 2.2: Kubelet will not start if the system has swap enabled, so we are disabling swap using the below code.
 
