@@ -95,7 +95,7 @@
 #      become_method: sudo
       
 - name: Initialize Kubernetes cluster using kubeadm
-  shell: kubeadm init  --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}", --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+  shell: kubeadm init  --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}","{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
 #  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16 --ignore-preflight-errors=all  
   become_method: sudo
 
