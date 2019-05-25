@@ -84,6 +84,20 @@
     enabled: yes
     state: started
 
+#- name: K8S | Install K8S | Install Kubernetes
+#  apt: 
+#    name: "{{ packages }}"
+#    enabled: yes
+#    update_cache: yes
+#    state: present
+#  become: true
+#  become_method: sudo
+#  vars:
+#   packages:
+#    - kubelet
+#    - kubeadm
+#    - kubectl
+
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
 
 #- name: Initialize the Kubernetes cluster using kubeadm
