@@ -124,8 +124,8 @@
 - name: K8S | Install Master | Install pod network
   shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 
-- name: Install calico pod network
-  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
+#- name: Install calico pod network
+#  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
 
 #Step 2.6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
