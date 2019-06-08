@@ -47,3 +47,10 @@
       name: kubernetes-client.x86_64
       state: present
       allow_downgrade: yes
+
+- hosts: kube-master
+  tasks:
+  - name: Ansible fetch files from remote server to the local machine using Ansible fetch module
+    fetch:
+      src: /root/.kube/
+      dest: /var/lib/jenkins/
