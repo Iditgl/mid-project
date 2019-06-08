@@ -6,4 +6,4 @@
     - fetch:
         src: /root/.kube/config
         #dest: /var/lib/jenkins
-        dest: /tmp
+        dest: /tmp/test
