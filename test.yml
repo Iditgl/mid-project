@@ -5,4 +5,5 @@
     # /tmp/fetched/host.example.com/tmp/somefile on local machine
     - fetch:
         src: /root/.kube/config
-        dest: /var/lib/jenkins
+        #dest: /var/lib/jenkins
+        dest: /tmp
