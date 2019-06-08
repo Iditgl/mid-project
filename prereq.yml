@@ -41,3 +41,9 @@
 #    when: >
 #          enable_jenkins_sudo is defined and
 #          enable_jenkins_sudo
+
+  - name: install kubectl
+    yum:
+      name: kubectl-1.10.12
+      state: present
+      allow_downgrade: yes
