@@ -7,5 +7,5 @@
     - fetch:
         src: /root/.kube/config
         #dest: /var/lib/jenkins/config
-        dest: root/.kube/config
+        dest: /root/.kube/config
         flat: yes
