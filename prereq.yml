@@ -44,6 +44,6 @@
 
   - name: install kubectl
     yum:
-      name: kubectl-1.10.12
+      name: kubernetes-client.x86_64
       state: present
       allow_downgrade: yes
