@@ -1,0 +1,8 @@
+---
+- hosts: kube-master
+  tasks:
+    # Copy remote file (host.example.com:/tmp/somefile) into
+    # /tmp/fetched/host.example.com/tmp/somefile on local machine
+    - fetch:
+        src: /root/.kube/config
+        dest: /var/lib/jenkins
