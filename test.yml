@@ -6,6 +6,6 @@
     - fetch:
         src: /root/.kube/config
         #src: /tmp/idit
-        #dest: /var/lib/jenkins
-        dest: /tmp/test
+        dest: /var/lib/jenkins
+        #dest: /tmp/config
         flat: yes
