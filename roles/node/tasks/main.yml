@@ -59,19 +59,19 @@
 
 - name: install kubelet
   yum:
-    #name: kubelet-1.10.12
-    name:  kubelet-1.14.3
+    name: kubelet-1.10.12
+    #name:  kubelet-1.14.3
     state: present
     update_cache: true
 
 - name: install kubeadm
   yum:
-    name: kubeadm-1.14.3
+    name: kubeadm-1.10.12
     state: present
     
 - name: install kubectl
   yum:
-    name: kubectl-1.14.3
+    name: kubectl-1.10.12
     state: present
     allow_downgrade: yes
 
