@@ -71,11 +71,11 @@
 
 - name: install kubeadm
   yum:
-    name: kubeadm-1.13.7
+    name: kubeadm-1.10.12
     state: present
 - name: install kubectl
   yum:
-    name: kubectl-1.13.7
+    name: kubectl-1.10.12
     state: present
     allow_downgrade: yes
 
@@ -85,35 +85,10 @@
     enabled: yes
     state: started
 
-#- name: K8S | Install K8S | Install Kubernetes
-#  apt: 
-#    name: "{{ packages }}"
-#    enabled: yes
-#    update_cache: yes
-#    state: present
-#  become: true
-#  become_method: sudo
-#  vars:
-#   packages:
-#    - kubelet
-#    - kubeadm
-#    - kubectl
-
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
-
-#- name: Initialize the Kubernetes cluster using kubeadm
-#  command: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}"  --node-name k8s-master --ignore-preflight-errors=all --pod-network-cidr=192.168.0.0/16
-
-
-#- name: Initialize Kubernetes cluster using kubeadm
-#      shell: kubeadm init --token={{ kubeadm_token }} --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16
-#      become_method: sudo
       
 - name: Initialize Kubernetes cluster using kubeadm
   shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
-  become_method: sudo
-#  shell: kubeadm init  --apiserver-cert-extra-sans="{{hostvars['mid-proj-k8s-master-1'].private_ip}}","{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
-#  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=10.0.0.0/16 --ignore-preflight-errors=all  
   become_method: sudo
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
@@ -124,12 +99,6 @@
    - mkdir -p ~/.kube
    - cp -rf /etc/kubernetes/admin.conf ~/.kube/config
    - chown centos:centos  ~/.kube/config
-   
-#   - cp -i /etc/kubernetes/admin.conf ~/.kube/config
-#   - chown vagrant:vagrant ~/.kube/config
-
-#- name: Add Calico RBAC setting
-#  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
 #Step 2.5: Setup the container networking provider and the network policy engine using the below code.
 
@@ -138,12 +107,6 @@
 
 #  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
-
-#- name: K8S | Install Master | Install pod network
-#  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
-
-#- name: Install calico pod network
-#  command: kubectl apply -f https://docs.projectcalico.org/v3.1/getting-started/kubernetes/installation/hosted/calico.yaml
 
 #Step 2.6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
