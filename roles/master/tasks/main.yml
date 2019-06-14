@@ -64,8 +64,8 @@
 
 - name: install kubelet
   yum:
-    #name: kubelet-1.10.12
-    name:  kubelet-1.13.7
+    name: kubelet-1.10.12
+    #name:  kubelet-1.13.7
     state: present
     update_cache: true
 
