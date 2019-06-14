@@ -86,9 +86,9 @@
     state: started
 
 # Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
-      
+
 - name: Initialize Kubernetes cluster using kubeadm
-  shell: kubeadm init --apiserver-advertise-address="{{hostvars['mid-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+  shell: kubeadm init --apiserver-advertise-address="{{hostvars['final-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
   become_method: sudo
 
 # Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
