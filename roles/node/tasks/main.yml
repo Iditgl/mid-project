@@ -1,5 +1,4 @@
-# Step 2.1: Install Docker and its dependent components.
-
+# Step 1: Install Docker and its dependent components.
 - name: install Docker
   sudo: yes
   yum:
@@ -26,8 +25,7 @@
     name: centos
     group: docker
 
-# Step 2.2: Kubelet will not start if the system has swap enabled, so we are disabling swap using the below code.
-
+# Step 2: Disabling swap using the below code.
 - name: Remove swapfile from /etc/fstab
   mount:
     name: "{{ item }}"
@@ -40,8 +38,7 @@
 - name: Disable swap
   command: swapoff -a
 
-# Step 2.3: Installing kubelet, kubeadm and kubectl using the below code.
-
+# Step 3: Installing kubelet, kubeadm and kubectl using the below code.
 - name: disable SELinux
   command: setenforce 0
 
@@ -81,7 +78,7 @@
     enabled: yes
     state: started
 
-# Step 3.2: Join the nodes to the Kubernetes cluster using below code.
+# Step 4: Join the nodes to the Kubernetes cluster using below code.
 - name: Copy the join command to server location
   copy: src=join-command dest=/tmp/join-command.sh mode=0777
 

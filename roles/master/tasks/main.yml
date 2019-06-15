@@ -105,7 +105,7 @@
 #  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
 
-#Step 6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
+# Step 6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
 - name: Generate join command
   command: kubeadm token create --print-join-command
@@ -116,28 +116,19 @@
  # become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }} --ignore-preflight-errors=cri" dest="join-command"
 
-#Step 7: Restarting services
+# Step 8: Adding --cloud-provider=aws in kube services manifests
+- name: Inserting a line (--cloud-provider) after spec > containers > command  
+  lineinfile:
+    path: /etc/kubernetes/manifests
+    line: --cloud-provider=aws
+    insertafter: - command: 
+
+# Step 7: Restarting services
 - name: reload systemd
   sudo: yes
   command: systemctl daemon-reload
-
-#- name: reload systemd
-#  become: true
-#  command: systemctl --system daemon-reload
-#  notify:
-#    - restart daemons
-
-#- name: restart daemons
-#  command: /bin/true
-#  notify:
-#    - restart kubelet
 
 - name: restart kubelet
   become: true
   service: name=kubelet state=restarted
 
-#- name: Start service foo, based on running process /usr/bin/foo
-#  service:
-#    name: foo
-#    pattern: /usr/bin/foo
-#    state: started
