@@ -1,5 +1,4 @@
-# Step 2.1: Install Docker and its dependent components.
-
+# Step 1: Install Docker and its dependent components.
 - name: install Docker
   sudo: yes
   yum:
@@ -45,8 +44,6 @@
 
 - debug: msg="{{nodelist}}"
 
-# Step 2.3: Installing kubelet, kubeadm and kubectl using the below code.
-
 - name: disable SELinux
   command: setenforce 0
 
@@ -54,6 +51,7 @@
   selinux:
    state: disabled
 
+#Step 2: Installing k8s prereq (kubelet, kubeadm, kubectl)
 - name: add Kubernetes' YUM repository
   yum_repository:
     name: Kubernetes
@@ -85,13 +83,12 @@
     enabled: yes
     state: started
 
-# Step 2.3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
-
+# Step 3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
 - name: Initialize Kubernetes cluster using kubeadm
   shell: kubeadm init --apiserver-advertise-address="{{hostvars['final-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
   become_method: sudo
 
-# Step 2.4: Setup the kube config file for the vagrant user to access the Kubernetes cluster using the below code.
+# Step 4: Setup the k8s config file for the centos user to access the Kubernetes cluster using the below code.
 
 - name: Setup kubeconfig for vagrant user
   command: "{{ item }}"
@@ -100,7 +97,7 @@
    - cp -rf /etc/kubernetes/admin.conf ~/.kube/config
    - chown centos:centos  ~/.kube/config
 
-#Step 2.5: Setup the container networking provider and the network policy engine using the below code.
+#Step 5: Setup the container networking provider and the network policy engine using the below code.
 
 - name: K8S | Install Master | Install pod network
   shell: kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml
@@ -108,7 +105,7 @@
 #  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
 
-#Step 2.6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
+#Step 6: Generate kube join command for joining the node to the Kubernetes cluster and store the command in the file named join-command.
 
 - name: Generate join command
   command: kubeadm token create --print-join-command
@@ -118,3 +115,29 @@
  # sudo: no
  # become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }} --ignore-preflight-errors=cri" dest="join-command"
+
+#Step 7: Restarting services
+- name: reload systemd
+  sudo: yes
+  command: systemctl daemon-reload
+
+- name: reload systemd
+  become: true
+  command: systemctl --system daemon-reload
+  notify:
+    - restart daemons
+
+- name: restart daemons
+  command: /bin/true
+  notify:
+    - restart kubelet
+
+- name: restart kubelet
+  become: true
+  service: name=kubelet state=restarted
+
+#- name: Start service foo, based on running process /usr/bin/foo
+#  service:
+#    name: foo
+#    pattern: /usr/bin/foo
+#    state: started
