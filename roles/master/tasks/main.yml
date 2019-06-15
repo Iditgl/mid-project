@@ -121,14 +121,14 @@
   lineinfile:
     path: /etc/kubernetes/manifests/kube-controller-manager.yaml
     line: '    - --cloud-provider=aws' 
-    insertafter: '- kube-controller-manager' 
+    insertafter: '- --node-cidr-mask-size=24' 
 
 # Step 8: Adding --cloud-provider=aws in kube services manifests
 - name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
   lineinfile:
     path: /etc/kubernetes/manifests/kube-apiserver.yaml
     line: '    - --cloud-provider=aws'
-    insertafter: '- kube-apiserver'
+    insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
 
 # Step 9: Restarting services
 - name: reload systemd
