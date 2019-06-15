@@ -121,16 +121,16 @@
   sudo: yes
   command: systemctl daemon-reload
 
-- name: reload systemd
-  become: true
-  command: systemctl --system daemon-reload
-  notify:
-    - restart daemons
+#- name: reload systemd
+#  become: true
+#  command: systemctl --system daemon-reload
+#  notify:
+#    - restart daemons
 
-- name: restart daemons
-  command: /bin/true
-  notify:
-    - restart kubelet
+#- name: restart daemons
+#  command: /bin/true
+#  notify:
+#    - restart kubelet
 
 - name: restart kubelet
   become: true
