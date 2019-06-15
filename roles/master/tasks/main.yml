@@ -116,14 +116,21 @@
  # become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }} --ignore-preflight-errors=cri" dest="join-command"
 
-# Step 8: Adding --cloud-provider=aws in kube services manifests
-- name: Inserting a line (--cloud-provider) after spec > containers > command  
+# Step 7: Adding --cloud-provider=aws in kube services manifests
+- name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml  
   lineinfile:
-    path: /etc/kubernetes/manifests
+    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
     line: --cloud-provider=aws
     insertafter: '- command:' 
 
-# Step 7: Restarting services
+# Step 8: Adding --cloud-provider=aws in kube services manifests
+- name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
+  lineinfile:
+    path: /etc/kubernetes/manifests/kube-apiserver.yaml
+    line: --cloud-provider=aws
+    insertafter: '- command:'
+
+# Step 9: Restarting services
 - name: reload systemd
   sudo: yes
   command: systemctl daemon-reload
