@@ -121,7 +121,7 @@
   lineinfile:
     path: /etc/kubernetes/manifests
     line: --cloud-provider=aws
-    insertafter: - command: 
+    insertafter: '- command:' 
 
 # Step 7: Restarting services
 - name: reload systemd
