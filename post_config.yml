@@ -2,12 +2,12 @@
 - hosts: kube-master
   tasks:
 # Step 1: Configuring mgmt server for connecting to k8s cluster
-- name: Copy kube config from k8s cluster
-  fetch:
-    src: /root/.kube/config
-    #dest: /var/lib/jenkins/config
-    dest: /root/.kube/config
-    flat: yes
+    - name: Copy kube config from k8s cluster
+      fetch:
+        src: /root/.kube/config
+        #dest: /var/lib/jenkins/config
+        dest: /root/.kube/config
+        flat: yes
 
     #- fetch:
     #    src: /root/.kube/config
@@ -15,20 +15,20 @@
     #    flat: yes
 
 # Step 2: Adding --cloud-provider=aws in kube services manifests
-- name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml
-  lineinfile:
-    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
-    line: '    - --cloud-provider=aws'
-    insertafter: '- --node-cidr-mask-size=24'
+    - name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml
+      lineinfile:
+        path: /etc/kubernetes/manifests/kube-controller-manager.yaml
+        line: '    - --cloud-provider=aws'
+        insertafter: '- --node-cidr-mask-size=24'
 
 # Step 3: Adding --cloud-provider=aws in kube services manifests
-- name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
-  lineinfile:
-    path: /etc/kubernetes/manifests/kube-apiserver.yaml
-    line: '    - --cloud-provider=aws'
-    insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
+    - name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
+      lineinfile:
+        path: /etc/kubernetes/manifests/kube-apiserver.yaml
+        line: '    - --cloud-provider=aws'
+        insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
 
 # Step 4: Restarting services
-- name: reload systemd
-  sudo: yes
-  command: systemctl daemon-reload
+    - name: reload systemd
+      sudo: yes
+      command: systemctl daemon-reload
