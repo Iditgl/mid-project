@@ -1,0 +1,11 @@
+---
+- hosts: kube-master
+  tasks:
+#  - name: Copy kube config from k8s cluster
+    # Copy remote file (host.example.com:/tmp/somefile) into
+    # /tmp/fetched/host.example.com/tmp/somefile on local machine
+    - fetch:
+        src: /root/.kube/config
+        #dest: /var/lib/jenkins/config
+        dest: /root/.kube/config
+        flat: yes
