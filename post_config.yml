@@ -28,7 +28,14 @@
         line: '    - --cloud-provider=aws'
         insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
 
-# Step 4: Restarting services
+# Step 4: Adding an exrea flag --cloud-provider=aws to 10-kubeadm.conf
+    - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws'
+        insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki'
+
+# Step 5: Restarting services
     - name: reload systemd
       sudo: yes
       command: systemctl daemon-reload
