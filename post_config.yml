@@ -42,5 +42,5 @@
 
     - name: kubelet restart
       sudo: yes
-      command: systemctl kubelet restart
+      command: systemctl restart kubelet
 
