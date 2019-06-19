@@ -43,9 +43,3 @@
     - name: kubelet restart
       sudo: yes
       command: systemctl system restart
-
-   - name:  kubelet restart 2
-     service:
-       name: kubelet
-       daemon_reload: yes
-       state: restarted
