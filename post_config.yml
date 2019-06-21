@@ -32,7 +32,7 @@
     - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
       lineinfile:
         path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws'
+        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws"'
         insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"'
 
 # Step 5: KUBE-MASTER: Restarting services
@@ -50,7 +50,7 @@
     - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
       lineinfile:
         path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws'
+        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws"'
         insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"'
 
 # Step 4: KUBE-NODE: Restarting services
