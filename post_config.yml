@@ -46,20 +46,6 @@
 
 - hosts: kube-node
   tasks:
-# Step 1: KUBE-NODE: Adding --cloud-provider=aws in kube services manifests
-    - name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml
-      lineinfile:
-        path: /etc/kubernetes/manifests/kube-controller-manager.yaml
-        line: '    - --cloud-provider=aws'
-        insertafter: '- --node-cidr-mask-size=24'
-
-# Step 2: KUBE-NODE: Adding --cloud-provider=aws in kube services manifests
-    - name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
-      lineinfile:
-        path: /etc/kubernetes/manifests/kube-apiserver.yaml
-        line: '    - --cloud-provider=aws'
-        insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
-
 # Step 3: KUBE-NODE: Adding an exrea flag --cloud-provider=aws to 10-kubeadm.conf
     - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
       lineinfile:
