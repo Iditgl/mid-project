@@ -1,7 +1,7 @@
 ---
 - hosts: kube-master
   tasks:
-# Step 1: Configuring mgmt server for connecting to k8s cluster
+# Step 1: KUBE-MASTER: Configuring mgmt server for connecting to k8s cluster
     - name: Copy kube config from k8s cluster
       fetch:
         src: /root/.kube/config
@@ -14,28 +14,28 @@
     #    dest: /root/.kube/config
     #    flat: yes
 
-# Step 2: Adding --cloud-provider=aws in kube services manifests
+# Step 2: KUBE-MASTER: Adding --cloud-provider=aws in kube services manifests
     - name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml
       lineinfile:
         path: /etc/kubernetes/manifests/kube-controller-manager.yaml
         line: '    - --cloud-provider=aws'
         insertafter: '- --node-cidr-mask-size=24'
 
-# Step 3: Adding --cloud-provider=aws in kube services manifests
+# Step 3: KUBE-MASTER: Adding --cloud-provider=aws in kube services manifests
     - name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
       lineinfile:
         path: /etc/kubernetes/manifests/kube-apiserver.yaml
         line: '    - --cloud-provider=aws'
         insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
 
-# Step 4: Adding an exrea flag --cloud-provider=aws to 10-kubeadm.conf
+# Step 4: KUBE-MASTER: Adding an exrea flag --cloud-provider=aws to 10-kubeadm.conf
     - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
       lineinfile:
         path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
         line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws'
-        insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki'
+        insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"'
 
-# Step 5: Restarting services
+# Step 5: KUBE-MASTER: Restarting services
     - name: reload systemd
       sudo: yes
       command: systemctl daemon-reload
@@ -44,3 +44,34 @@
       sudo: yes
       command: systemctl restart kubelet
 
+- hosts: kube-node
+  tasks:
+# Step 1: KUBE-NODE: Adding --cloud-provider=aws in kube services manifests
+    - name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml
+      lineinfile:
+        path: /etc/kubernetes/manifests/kube-controller-manager.yaml
+        line: '    - --cloud-provider=aws'
+        insertafter: '- --node-cidr-mask-size=24'
+
+# Step 2: KUBE-NODE: Adding --cloud-provider=aws in kube services manifests
+    - name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
+      lineinfile:
+        path: /etc/kubernetes/manifests/kube-apiserver.yaml
+        line: '    - --cloud-provider=aws'
+        insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
+
+# Step 3: KUBE-NODE: Adding an exrea flag --cloud-provider=aws to 10-kubeadm.conf
+    - name: Inserting a line (--cloud-provider) to 10-kubeadm.conf
+      lineinfile:
+        path: /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+        line: 'Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws'
+        insertafter: 'Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true --cert-dir=/var/lib/kubelet/pki"'
+
+# Step 4: KUBE-NODE: Restarting services
+    - name: reload systemd
+      sudo: yes
+      command: systemctl daemon-reload
+
+    - name: kubelet restart
+      sudo: yes
+      command: systemctl restart kubelet
