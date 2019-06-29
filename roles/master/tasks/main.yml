@@ -84,8 +84,12 @@
     state: started
 
 # Step 3: Initialize the Kubernetes cluster with kubeadm using the below code (applicable only on master node).
+#- name: Initialize Kubernetes cluster using kubeadm
+#  shell: kubeadm init --apiserver-advertise-address="{{hostvars['final-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+#  become_method: sudo
+
 - name: Initialize Kubernetes cluster using kubeadm
-  shell: kubeadm init --apiserver-advertise-address="{{hostvars['final-proj-k8s-master-1'].ansible_host}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
+  shell: kubeadm init --apiserver-advertise-address="{{hostvars['final-proj-k8s-master-1'].private_ip}}" --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=all
   become_method: sudo
 
 # Step 4: Setup the k8s config file for the centos user to access the Kubernetes cluster using the below code.
@@ -116,26 +120,6 @@
  # become: false
   local_action: copy content="{{ join_command.stdout_lines[0] }} --ignore-preflight-errors=cri" dest="join-command"
 
-# Step 7: Adding --cloud-provider=aws in kube services manifests
-#- name: Inserting a line (--cloud-provider) to kube-controller-manager.yaml  
-#  lineinfile:
-#    path: /etc/kubernetes/manifests/kube-controller-manager.yaml
-#    line: '    - --cloud-provider=aws' 
-#    insertafter: '- --node-cidr-mask-size=24' 
-
-# Step 8: Adding --cloud-provider=aws in kube services manifests
-#- name: Inserting a line (--cloud-provider) to kube-apiserver.yaml
-#  lineinfile:
-#    path: /etc/kubernetes/manifests/kube-apiserver.yaml
-#    line: '    - --cloud-provider=aws'
-#    insertafter: '- --etcd-keyfile=/etc/kubernetes/pki/apiserver-etcd-client.key'
-
-# Step 9: Restarting services
-#- name: reload systemd
-#  sudo: yes
-#  command: systemctl daemon-reload
-
 - name: restart kubelet
   become: true
   service: name=kubelet state=restarted
-
